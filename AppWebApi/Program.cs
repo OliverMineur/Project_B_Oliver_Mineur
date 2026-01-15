@@ -85,6 +85,23 @@ builder.Services.AddScoped<IQuotesService, QuotesServiceDb>();
 builder.Services.AddScoped<LoginDbRepos>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWebApp", policy =>
+    {
+        policy
+            .WithOrigins("https://localhost:5115")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddControllers();
+builder.Services.AddHttpClient();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -99,7 +116,7 @@ var app = builder.Build();
 }
 
 app.UseHttpsRedirection();
-app.UseCors(); 
+app.UseCors("AllowWebApp");
 
 app.UseAuthorization();
 app.MapControllers();

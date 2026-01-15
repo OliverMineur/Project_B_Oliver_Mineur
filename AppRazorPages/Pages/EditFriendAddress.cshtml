@@ -1,0 +1,57 @@
+﻿@page
+@model MyApp.Namespace.EditFriendAddressModel
+@{
+}
+
+<div class="ContentBox text-light">
+    <div class="text-center">
+        <h1 class="display-4">Edit Friend Address</h1>
+        <h5>Enter Friend Guid To Edit Address:</h5>
+        <form method="post">
+            <input type="text" name="FriendGuid" class="form-control" style="width: 400px; margin: auto"/>
+            <button type="submit" asp-page-handler="CallGetFriend" class="buttonColor text-light rounded mt-2">
+                Submit
+            </button>
+        </form>
+
+        @if (Model.FriendsData?.Item.Address != null)
+        {
+            <div class="mt-4">
+                <h3>Friend Information:</h3>
+
+                <form method="post" class="mt-4" style="width: 400px; margin: auto">
+                    <input type="text" hidden name="AddressGuid" value="@Model.FriendsData.Item.Address.AddressId.ToString()"/>
+                    
+                    <div class="form-group">
+                        <label for="streetaddress">Street Address:</label>
+                        <input type="text" class="form-control" id="streetaddress" name="streetaddress" value="@Model.FriendsData.Item.Address.StreetAddress"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="zipcode">ZipCode:</label>
+                        <input type="number" class="form-control" id="zipcode" name="zipcode" value="@Model.FriendsData.Item.Address.ZipCode"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="city">City:</label>
+                        <input type="text" class="form-control" id="city" name="city" value="@Model.FriendsData.Item.Address.City"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country:</label>
+                        <input type="text" class="form-control" id="country" name="country" value="@Model.FriendsData.Item.Address.Country"/>
+                    </div>
+                    <button type="submit" asp-page-handler="CallEditFriendAddress" class="buttonColor text-light rounded mt-2">
+                        Submit
+                    </button>
+                </form>
+
+            </div>
+        }
+        @if (Model.ShowSuccessMessage)
+        {
+            <h3 class="text-success mt-3">Friend details updated successfully!</h3>
+        }
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <h3 class="text-danger mt-3">@Model.ErrorMessage</h3>
+        }
+    </div>
+</div>

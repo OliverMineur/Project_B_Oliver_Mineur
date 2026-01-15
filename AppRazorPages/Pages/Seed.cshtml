@@ -1,0 +1,46 @@
+﻿@page "/Seed"
+@model MyApp.Namespace.SeedModel
+@{
+
+        ViewData["Title"] = "Seed";
+    }
+<div class="ContentBox">
+    <div class="text-center">
+        <h1 class="display-4 text-light">Seed Page</h1>
+    </div>
+
+    <div class="mycontainer text-light">
+        <div>
+            <h1>Seed Database</h1>
+            <p>Seed your database with various data</p>
+
+            <form method="post">
+                <input type="number" name="Count" value="100" min="1" class="form-control" />
+                <button type="submit" asp-page-handler="CallSeed" class="buttonColor text-light rounded mt-2">
+                    Seed
+                </button>
+            </form>
+
+            @if (!String.IsNullOrEmpty(Model.SeedResult))
+            {
+                <h3>Successfully seeded @Model.SeedResult.Count()</h3>
+            }
+        </div>
+        <div>
+            <h1>Remove Seed</h1>
+            <p>Remove all seeded data from the database</p>
+
+            <form method="post">
+                <button type="submit" asp-page-handler="CallRemoveSeed" class="buttonColor text-light rounded mt-2">
+                    Remove Seed
+                </button>
+            </form>
+
+            @if (!String.IsNullOrEmpty(Model.RemoveSeedResult))
+            {
+                <h3>@Model.RemoveSeedResult</h3>
+            }
+        </div>
+    </div>
+    
+</div>

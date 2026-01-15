@@ -1,0 +1,43 @@
+﻿@page
+@using Microsoft.VisualBasic
+@model MyApp.Namespace.FriendsAndPetsFilteredModel
+@{
+
+    ViewData["Title"] = "Friends And Pets Filtered";
+}
+<div class="ContentBox">
+    <div class="text-center">
+        <h1 class="display-4 text-light">Friends And Pets Filtered</h1>
+    </div>
+
+        @if(Model.FriendsData.PageItems != null)
+    {
+        <form method="get">
+            <select asp-for="SelectedCountry" asp-items="@(new SelectList(Model.CountryList))">
+                <option value="">Choose a country</option>
+            </select>
+            <button type="submit" class="buttonColor text-light rounded mt-2">Go</button>
+        </form>
+    }
+
+    @if(Model.SelectedCountry != null)
+    {
+        <h3 class="text-light">Showing @Model.SelectedCountry</h3>
+        var friendsInSelectedCountry = Model.FriendsData.PageItems.Where(f => f.Country.ToLower() == Model.SelectedCountry.ToLower());
+
+        foreach(var address in friendsInSelectedCountry)
+        {
+           foreach(var friend in address.Friends)
+           {
+              <h4 class="text-light mt-4">@friend.FirstName @friend.LastName's Pets in @address.City, @address.Country</h4>
+              <ul class="text-light">
+                @foreach(var pet in friend.Pets)
+                {
+                    <li>@pet.Name the @pet.Kind.ToString()</li>
+                }
+              </ul>
+           }
+        }   
+    }
+
+</div>

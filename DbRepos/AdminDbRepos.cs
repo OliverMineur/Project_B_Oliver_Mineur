@@ -12,6 +12,9 @@ using DbModels;
 using DbContext;
 using Configuration;
 using Encryption;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
 
 namespace DbRepos;
 
@@ -181,4 +184,16 @@ public class AdminDbRepos
 
         return await DbInfo();
     }
+
+public class AbstractConverter<TReal, TAbstract> : Newtonsoft.Json.JsonConverter where TReal : TAbstract
+{
+    public override Boolean CanConvert(Type objectType)
+        => objectType == typeof(TAbstract);
+
+    public override Object ReadJson(JsonReader reader, Type objectType, Object existingValue, JsonSerializer serializer)
+        => serializer.Deserialize<TReal>(reader);
+
+    public override void WriteJson(JsonWriter writer, Object value, JsonSerializer serializer)
+        => serializer.Serialize(writer, value);
+}
 }

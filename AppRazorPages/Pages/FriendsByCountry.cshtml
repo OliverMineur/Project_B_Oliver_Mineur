@@ -1,0 +1,42 @@
+﻿@page
+@using System.Security.Permissions
+@model MyApp.Namespace.FriendsByCountryModel
+@{
+    ViewData["Title"] = "Friends By Country";
+}
+
+<div class="ContentBox">
+    <div class="text-center">
+        <h1 class="display-4 text-light">Friends By Country</h1>
+    </div>
+
+    @if(@Model.FriendsByCountry != null)
+    {
+        var country = Model.FriendsByCountry.ElementAt(@Model.pagenr);
+    
+        <h2 class="mt-4 text-light border rounded">@country.Key</h2>
+        @foreach(var friend in country)
+        {
+            <ul class="text-light">
+                <strong>@friend.FirstName @friend.LastName</strong>
+            </ul>
+    
+        }
+
+    <div class="mt-4">
+        <form method="post">
+            <input type="hidden" name="pagenr" value="@Model.pagenr" />
+            @if(Model.pagenr > 0)
+            {
+                <button type="submit" asp-page-handler="CallPreviousPage" class="buttonColor text-light rounded mt-2">Previous</button>
+            }
+            @if(Model.pagenr < Model.FriendsByCountry.Count() - 1)
+            { 
+                <button type="submit" asp-page-handler="CallNextPage" class="buttonColor text-light rounded mt-2">Next</button>
+            }
+        </form>
+    </div>
+    }
+
+</div>
+

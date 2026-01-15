@@ -1,0 +1,64 @@
+﻿@page
+@using Models.Interfaces
+@model MyApp.Namespace.FriendsCountryAndCityFilteredModel
+@{
+}
+
+<div class="ContentBox">
+    <div class="text-center">
+        <h1 class="display-4 text-light">Friends And Pets Filtered</h1>
+    </div>
+
+        @if(Model.FriendsData.PageItems != null)
+    {
+        <form method="get">
+            <select asp-for="SelectedCountry" asp-items="@(new SelectList(Model.CountryList))">
+                <option value="">Choose a country</option>
+            </select>
+            <select asp-for="SelectedCity" asp-items="@(new SelectList(Model.CityList))">
+                <option value="">Choose a city</option>
+            </select>
+            <button type="submit" class="buttonColor text-light rounded mt-2">Go</button>
+        </form>
+    }
+
+    @if(Model.SelectedCountry != null || Model.SelectedCity != null)
+    {
+        IEnumerable<IAddress> friendsInSelectedCountry;
+        <h3 class="text-light">Showing @Model.SelectedCountry</h3>
+
+        var query = Model.FriendsData.PageItems.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(Model.SelectedCountry))
+        {
+            query = query.Where(f =>
+                f.Country != null &&
+                f.Country.Equals(Model.SelectedCountry, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(Model.SelectedCity))
+        {
+            query = query.Where(f =>
+                f.City != null &&
+                f.City.Equals(Model.SelectedCity, StringComparison.OrdinalIgnoreCase));
+        }
+
+        friendsInSelectedCountry = query.ToList();
+
+        foreach(var address in friendsInSelectedCountry)
+        {
+           foreach(var friend in address.Friends)
+           {
+              <h4 class="text-light mt-4">@friend.FirstName @friend.LastName --- @address.City, @address.Country</h4>
+           }
+        } 
+
+                
+        
+
+
+        
+          
+    }
+
+</div>

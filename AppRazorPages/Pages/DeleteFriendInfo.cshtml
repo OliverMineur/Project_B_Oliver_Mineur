@@ -1,0 +1,64 @@
+﻿@page
+@model MyApp.Namespace.DeleteFriendInfoModel
+@{
+}
+<div class="ContentBox text-light">
+    <div class="text-center">
+        <h1 class="display-4">Delete Friend Details</h1>
+        <h5>Enter Friend Guid To See Details:</h5>
+        <form method="post">
+            <input type="text" name="FriendGuid" class="form-control" style="width: 400px; margin: auto"/>
+            <button type="submit" asp-page-handler="CallFriendDetails" class="buttonColor text-light rounded mt-2">
+                Submit
+            </button>
+        </form>
+
+        @if (Model.FriendsData != null)
+        {
+            <div class="mt-4">
+                <h3>Friend Information:</h3>
+                <p><strong>Name:</strong> @Model.FriendDetails.FirstName @Model.FriendDetails.LastName</p>
+                <p><strong>Birthday:</strong> @Model.FriendDetails.Birthday?.ToString("d-M-yyyy")</p>
+                <p><strong>Email:</strong> @Model.FriendDetails.Email</p>
+                <p><strong>Address:</strong> @Model.FriendDetails.Address?.StreetAddress, @Model.FriendDetails.Address?.City, @Model.FriendDetails.Address?.Country</p>
+
+                <h3>Pets:</h3>
+                @if (Model.FriendDetails?.Pets != null && Model.FriendDetails.Pets.Any())
+                {
+                    <ul>
+                    @foreach (var pet in Model.FriendDetails.Pets)
+                    {
+                        <li>
+                            @pet.Name (Type: @pet.Kind)
+                            <form method="post" asp-page-handler="CallDeletePet" style="display:inline;">
+                                <input type="hidden" name="PetId" value="@pet.PetId" />
+                                <button type="submit" class="btn btn-sm btn-primary">Select</button>
+                            </form>
+                        </li>
+                    }
+                    </ul>
+                }
+                else
+                {
+                    <p>No pets found.</p>
+                }
+                @if (Model.FriendDetails?.Address != null)
+                {
+                <div>
+                    @Model.FriendDetails.Address.StreetAddress, @Model.FriendDetails.Address.City
+                    <form method="post" asp-page-handler="CallDeleteAddress" style="display:inline;">
+                        <input type="hidden" asp-for="AddressId" value="@Model.FriendDetails.Address.AddressId" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
+                }
+                else
+                {
+                    <p>No address found.</p>
+                }
+
+
+            </div>
+        }
+    </div>
+</div>
